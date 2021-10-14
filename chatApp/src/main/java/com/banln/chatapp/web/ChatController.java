@@ -32,6 +32,7 @@ public class ChatController {
 				.subscribeOn(Schedulers.boundedElastic());
 	}
 	
+	// 방에 접속한 전체 인원에게 메시지를 보낸다.
 	@CrossOrigin
 	@GetMapping(value = "/chat/roomNum/{roomNum}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	public Flux<Chat> findByRoomNum(@PathVariable Integer roomNum) {
