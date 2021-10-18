@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.banln.chatapp.domain.chat.Chat;
 import com.banln.chatapp.domain.chat.ChatRepository;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -25,6 +28,11 @@ public class ChatController {
 	private final ChatRepository chatRepository;
 	
 	//	귓속말 할때 사용하면 된다.
+	@ApiOperation(value = "귓속말 기능", notes = "1:1로 당사자에게만 채팅을 보낸다.")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "sender", value = "보내는 사람", example = "sender1"),
+		@ApiImplicitParam(name = "receiver", value = "받는 사람", example = "receiver1")
+	})
 	@CrossOrigin
 	@GetMapping(value = "/sender/{sender}/receiver/{receiver}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	public Flux<Chat> getMsg(@PathVariable String sender, @PathVariable String receiver) {
@@ -33,6 +41,10 @@ public class ChatController {
 	}
 	
 	// 방에 접속한 전체 인원에게 메시지를 보낸다.
+	@ApiOperation(value = "채팅방 대화하기", notes = "채팅에 참여한 모든 인원에게 메시지를 보낸다.")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "roomNum", value = "채팅방 번호", example = "1")
+	})
 	@CrossOrigin
 	@GetMapping(value = "/chat/roomNum/{roomNum}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	public Flux<Chat> findByRoomNum(@PathVariable Integer roomNum) {
